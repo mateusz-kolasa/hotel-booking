@@ -1,8 +1,10 @@
 {
   "profiles": {
     "HotelBooking": {
-      "commandName": "Project",
-      "commandLineArgs": "--hotels hotels.json\r\n--bookings bookings.json"
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
     }
   }
 }
