@@ -25,7 +25,6 @@ public class BookingBrowserTest
     [Fact]
     public void ReturnAvailableRooms()
     {
-
         Assert.Equal(2, this.bookingBrowser.CheckAvailability("Availability(H1, 20240901, SGL)"));
         Assert.Equal(1, this.bookingBrowser.CheckAvailability("Availability(H1, 20240901-20240903, DBL)"));
         Assert.Equal(-1, this.bookingBrowser.CheckAvailability("Availability(H1, 20240901-20240910, DBL)"));
@@ -57,5 +56,25 @@ public class BookingBrowserTest
         Action action = () => this.bookingBrowser.CheckAvailability("Availability(H1, 20240901, SGLA)");
         Exception exception = Assert.Throws<Exception>(() => action());
         Assert.Equal("Hotel does not have given room type", exception.Message);
+    }
+
+    [Fact]
+    public void ThrowsExceptionInvalidDate()
+    {
+        Action action = () => this.bookingBrowser.CheckAvailability("Availability(H1, 20240988, SGL)");
+        Exception exception = Assert.Throws<Exception>(() => action());
+        Assert.Equal("Provided date is not valid", exception.Message);
+
+        action = () => this.bookingBrowser.CheckAvailability("Availability(H1, 20240901-20250229, SGL)");
+        exception = Assert.Throws<Exception>(() => action());
+        Assert.Equal("Provided date is not valid", exception.Message);
+    }
+
+    [Fact]
+    public void ThrowsExceptionArrivalAfterDeparture()
+    {
+        Action action = () => this.bookingBrowser.CheckAvailability("Availability(H1, 20240905-20240901, SGL)");
+        Exception exception = Assert.Throws<Exception>(() => action());
+        Assert.Equal("Arrival can not be after departure", exception.Message);
     }
 }
